@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang = 'en'>
+	<head>
+	    <meta charset="utf-8">
+        <title>Project 2</title>
+        <script type="text/javascript" src="d3/d3.js"></script>
+		   <!-- jQuery -->
+		<script src="https://code.jquery.com/jquery.js"></script>
+		<link rel="stylesheet" type="text/css" href="style.css">
+		<!-- Bootstrap CSS -->
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+
+	</head>
+	<body>
+	<div class = "row">
+		<div class = "col-xs-5" ><h1 id = "varName">Important child qualities: Hard work<br>Year: 2010-2014</h1></div>
+		<div class = "col-xs-4"> 
+		<br>
+			<select id = "variableToDisplay">
+				<option value = "v13">V13: Important child qualities: Hard work</option>
+				<option value = "v15">V15: Important child qualities: Imagination</option>
+				<option value = "v23">V23: Satisfaction in your life</option>
+				<option value = "v24">V24: Most people can be trusted</option>
+				<option value = "v49">V49: One of my main goals in life has been to make my parents proud</option>
+				<option value = "v81">V81: Protecting environment vs. Economic growth</option>
+				<option value = "v102">2005-2014 only, V102: How much you trust: Your family</option>
+				<option value = "v165">2010-2014 only, V165: Older people are not much respected these days</option>
+			</select>
+			<button id = "button" class = "btn btn-default">Set</button>
+			<br>
+			<select id = "wave">
+				<option value = "w6">2010-2014</option>
+				<option value = "w5">2005-2009</option>
+				<option value = "w4">1999-2004</option>
+				<option value = "w3">1995-1998</option>
+			</select>
+		</div>
+		</div>
+		<div class = "row">
+			<div class = "col-xs-6"  id = "chart"> </div>
+			<div class = "col-xs-2"  id = "leg"> </div>
+			<div class = "col-xs-3 tab" id = "table" style = "height:100vh"> </div>
+		</div>
+		<br>
+		<br>
+		<div class ="col-xs-12"><h1>What I learned</h1>
+		<h4><br>Back in 1995 Japan didn't know if they wanted economic growth and they still didn't 2014 (I just thought that was kind of funny that they had the biggest partion of people picking that option then and now so to speak)
+			<br>One thing to note is that the Gapminder data is the "Extreme Poverty %" and is a mean over the years that the different waves represent, 0 usually means no data. <br>
+			I learnt a lot more about D3 in this. I think this is tidier than my project 1 and it has more functional interactivity. I learnt to read multiple datasources, to clean the data
+			before use. I did this manually thought, maybe I shouldn't have? Just in general learning how to make something that's not overly crowded with texts and such while still trying to maintain interest in the visualization.
+			<br><br>
+			As for general knowledge I learnt that people in Georgia and Egypt are not very happy with their lives and that they don't really think
+			that imagination is important.
+		</h4>
+		</div>
+		<div class = "col-xs-6">
+			<h1>Analytic trail 1</h1>
+			<h3>Do poor countries, in general, prefer economic growth rather than protecting the environment? Is there any difference between rich and poor countries?</h3>
+			<h4>We first select the "Protecting environment vs economic growth" variable for years 2010-2014.
+			<br>
+			<br>
+			<img src = "images/pic1.png" style="height:500px; width:800px;"/>
+			<br>
+			We then sort with respect of the poverty %.
+			<img src = "images/pic2.png" style="height:500px; width:800px;"/>
+			<br>
+			We explore the content of the top countries by either clicking in the table or in the donut chart
+			<img src = "images/pic3.png" style="height:200px; width:400px;"/>
+			<img src = "images/pic31.png" style="height:200px; width:400px;"/>
+			<br>
+			Not much to go on here. Only really Nigeria that really favoured economic growth. One thing to note is that the extreme poverty 
+			may not be the best variable to use in context to a "poor" country since it only says how many earn less than a 1.15$ per day.<br>
+			<br>In conclusion; It does not seem to be the case that "poorer" countries feel like economic growth is more important. It varies.
+		</div>
+		<div class = "col-xs-6">
+			<h1>Analytic trail 2</h1>
+			<h3>Do countries that value imagination as a quality in children also think they are satisfied in life? Has this changed over time? Any difference between poor and rich countries?</h3>
+			<h4>Begin by looking up the top countries that mentions imagination as a quality in children by selecting the variable in the drop down menu.
+			<br>
+			<br>
+			<img src = "images/pic4.png" style="height:500px; width:800px;"/>
+			<br>
+			We sort the donut chart as well as the table by pressing the desired variable in the legend-domain
+			as seen here:
+			<img src = "images/pic5.png" style="height:500px; width:800px;"/>
+			<br>
+			So we will at least check; Japan, South Africa, India, China and Sweden for the next variable
+			<br>
+			<img src = "images/pic6.png" style="height:500px; width:800px;"/>
+			<br>
+			Quite a bit of variables here so we wont do any sorting. We'll explore the said countries individually to see. We're looking for 
+			completely satisfied, a nine and an eight at least. Seven might be okay as well. Unfortunately due to little time there is no way to select these variables 
+			to display as a group.
+			<br>
+			<img src = "images/pic7.png" style="height:350px; width:800px;"/>
+			<img src = "images/pic8.png" style="height:350px; width:800px;"/>
+			<br>
+			As you can see both countries has over half of the sample-size saying that they are happy with their lives according to my definition (7 and above).
+			<br>
+			India had almost half, China well over half and Sweden had above 75%!!<br>
+			<br>
+			Egypt ang Georgia both had very low mentioning on imagination. Both of them also had lower satisfaction in life than others.
+			Both have the biggest portion of completely dissatisfied people and Egypt even had the most!
+
+		</div>
+		<script type="text/javascript">
+		/*
+		http://zeroviscosity.com/d3-js-step-by-step/step-6-animating-interactivity
+		*/
+			//todo, parallel coordinate system with variables as seen below, but the number of people (N) for each variable
+			var variableNames = {
+							"v13":"Important child qualities: Hard work",
+							"v15":"Important child qualities: Imagination",
+							"v23":"Satisfaction in your life", 
+							"v24":"Most people can be trusted", 
+							"v49":"One of my main goals in life has been to make my parents proud", 
+							"v81":"Protecting environment vs. Economic growth", 
+							"v102":"How much you trust: Your family", 
+							"v165":"Older people are not much respected these days"};
+			var waves = {
+				"w6" : "2010-2014",
+				"w5" : "2005-2009",
+				"w4" : "1999-2004",
+				"w3" : "1995-2008"
+			};
+			/* Countries, 30
+				- Argentina
+				- Australia
+				- Azerbaijan
+				- Belarus
+				- Brazil
+				- Colombia
+				- Chile
+				- China
+				- Ecuador
+				- Egypt
+				- Georgia
+				- Germany
+				- Ghana
+				- India
+				- Japan
+				- Jordan
+				- Morocco
+				- New Zeeland
+				- Nigeria
+				- Pakistan
+				- Poland
+				- Rwanda
+				- South Africa
+				- Spain
+				- Sweden
+				- Thailand
+				- Tunisia
+				- Turkey
+				- Ukraine
+				- United States
+			*/
+			/* Variables, 8
+			- V13: Important child qualities: Hard work
+			- V15: Important child qualities: Imagination
+			- V23: Satisfaction in your life
+			- V24: Most people can be trusted
+			- V49: One of my main goals in life has been to make my parents proud
+			- V81: Protecting environment vs. Economic growth
+			- V102: How much you trust: Your family
+			- V165: Older people are not much respected these days
+			*/
+			/* Span, 20 years
+			- Wave 6 (2010-2014)
+			- Wave 5 (2005-2009)
+			- Wave 4 (1999-2004)
+			- Wave 3 (1995-1998)
+			*/
+			
+			var width = screen.width / 2 + 50;
+			var height = screen.height / 2 + 50;
+			var rad = Math.min(width, height) / 2;
+			var lr = 18;
+			var ls = 4;
+			var color = d3.scaleOrdinal(d3.schemeCategory20b);
+			var ptd = [];
+			var pc = [];
+			var temp = [];
+			var legendColor;
+			var legendColor2;
+			var svgleg;
+			var pie;
+			var svg;
+			var arc; 
+			var path;
+			var dataset = [];
+			var div;
+			var tableData = [];
+			var columns = [];
+			var current;
+			var wave;
+			var variables;
+			var currentp;
+			
+			d3.queue()
+				.defer(d3.csv, "data/w6/V13.csv")
+				.defer(d3.csv, "data/w6/V15.csv")
+				.defer(d3.csv, "data/w6/V23.csv")
+				.defer(d3.csv, "data/w6/V24.csv")
+				.defer(d3.csv, "data/w6/V49.csv")
+				.defer(d3.csv, "data/w6/V81.csv")
+				.defer(d3.csv, "data/w6/V102.csv")
+				.defer(d3.csv, "data/w6/V165.csv")
+					.defer(d3.csv, "data/w5/V13.csv")
+				.defer(d3.csv, "data/w5/V15.csv")
+				.defer(d3.csv, "data/w5/V23.csv")
+				.defer(d3.csv, "data/w5/V24.csv")
+				.defer(d3.csv, "data/w5/V49.csv")
+				.defer(d3.csv, "data/w5/V81.csv")
+				.defer(d3.csv, "data/w5/V102.csv")
+					.defer(d3.csv, "data/w4/V13.csv")
+				.defer(d3.csv, "data/w4/V15.csv")
+				.defer(d3.csv, "data/w4/V23.csv")
+				.defer(d3.csv, "data/w4/V24.csv")
+				.defer(d3.csv, "data/w4/V49.csv")
+				.defer(d3.csv, "data/w4/V81.csv")
+					.defer(d3.csv, "data/w3/V13.csv")
+				.defer(d3.csv, "data/w3/V15.csv")
+				.defer(d3.csv, "data/w3/V23.csv")
+				.defer(d3.csv, "data/w3/V24.csv")
+				.defer(d3.csv, "data/w3/V49.csv")
+				.defer(d3.csv, "data/w3/V81.csv")
+				.defer(d3.csv, "data/gapminder/w6/poverty.csv")
+				.defer(d3.csv, "data/gapminder/w5/poverty.csv")
+				.defer(d3.csv, "data/gapminder/w4/poverty.csv")
+				.defer(d3.csv, "data/gapminder/w3/poverty.csv")
+
+				.await(function(error, v13w6, v15w6, v23w6, v24w6, v49w6, v81w6, v102w6, v165w6
+									, v13w5, v15w5, v23w5, v24w5, v49w5, v81w5, v102w5
+									, v13w4, v15w4, v23w4, v24w4, v49w4, v81w4
+									, v13w3, v15w3, v23w3, v24w3, v49w3, v81w3
+									, pw6, pw5, pw4, pw3){
+					variables = {
+						"v13w6":v13w6,
+						"v15w6":v15w6,
+						"v23w6":v23w6,
+						"v24w6":v24w6,
+						"v49w6":v49w6,
+						"v81w6":v81w6,
+						"v102w6":v102w6,
+						"v165w6":v165w6,
+							"v13w5":v13w5,
+						"v15w5":v15w5,
+						"v23w5":v23w5,
+						"v24w5":v24w5,
+						"v49w5":v49w5,
+						"v81w5":v81w5,
+						"v102w5":v102w5,
+							"v13w4":v13w4,
+						"v15w4":v15w4,
+						"v23w4":v23w4,
+						"v24w4":v24w4,
+						"v49w4":v49w4,
+						"v81w4":v81w4,
+							"v13w3":v13w3,
+						"v15w3":v15w3,
+						"v23w3":v23w3,
+						"v24w3":v24w3,
+						"v49w3":v49w3,
+						"v81w3":v81w3,
+						"pw6" : pw6,
+						"pw5" : pw5,
+						"pw4" : pw4,
+						"pw3" : pw3,
+					};
+					//console.log(v13w6);
+					var list = [];
+					var start = v13w6;
+					current = v13w6;
+					currentp = pw6;
+					wave = "w6";
+					
+					updateCurrent();
+
+					svgleg = d3.select("#leg")
+								.append("svg")
+								.attr("width", 300)
+								.attr("height", 300)
+								.append("g")
+								.attr("transform", "translate("+25+ "," +150+")");
+					
+					//end of reading data, now plot stuff
+					svg = d3.select('#chart')
+									  .append('svg')
+									  .attr('width', width)
+									  .attr('height', height)
+									  .append('g')
+									  .attr('transform', 'translate(' + (width / 2) +
+										',' + (height / 2) + ')');
+					arc = d3.arc()
+								.innerRadius(rad - (rad/3))
+								.outerRadius(rad);
+					
+					div = d3.select("body").append("div").attr("class", "toolTip");
+					
+					//start alphabetiaclly
+					sort("Country");
+					paint();	
+					
+					$("#button").on("click", function(){
+						var v = variables[$("#variableToDisplay").val() + $("#wave").val()];
+						if(v == undefined){ //couldn't find any data
+							alert("Whoops, looks like we found no entry with that one");
+						}else{
+							current = v;
+							$("#varName").html(variableNames[$("#variableToDisplay").val()] + "<br>Year: " + waves[$("#wave").val()]);
+							wave = $("#wave").val();
+							currentp = variables["p" + wave];
+							
+				
+							//update everything
+							updateCurrent();
+							paint();
+						}
+					});
+			});
+			
+			var paint = function(){
+				svg.selectAll(".legend").remove();
+				svgleg.selectAll(".legend").remove();
+				
+				var variable = [];
+				for(var i = 0; i < current.length; i ++){
+					variable.push(current[i]);
+				}
+
+				dataset = [];
+				tableData = [];
+				columns = [];
+				for(var i in variable){
+					tableData.push({Country:variable[i].Country, Sum:variable[i].Sum, "Extreme Poverty %":variable[i]["Extreme Poverty %"]});
+					for (var key in variable[i]){
+						
+						if(key != "Sum" && key != "Country" && key != "Extreme Poverty %"){
+							dataset.push({Country:variable[i].Country, name:key, value:variable[i][key], Total:variable[i].Sum, state : 1, "Extreme Poverty %" :variable[i]["Extreme Poverty %"] });
+						}	
+					}
+				}
+				
+				columns = ["Country", "Sum", "Extreme Poverty %"];	
+				//saving them so i can go back to them later
+				pc = columns;
+				ptd = tableData;
+				paintTable(tableData, columns);
+				svg.selectAll("path").remove();
+				pie = d3.pie()
+							.value(function(d){
+								return d.value;
+							})
+							.sort(null);
+				
+				path = svg.selectAll("path")
+							.data(pie(dataset))
+							.enter()
+							.append("path")
+							.style("stroke", function(d){return d.data.color})
+							.attr("d", arc)
+							.attr("country", function(d){ return d.data.Country;})
+							.attr("fill", function(d, i){
+								d.data.color = color(d.data.Country);
+								return d.data.color;
+							})
+							.attr("stroke", function(d){return d.data.color;})
+							.each(function(d){this._current = d});
+
+				//label
+				var tooltip = d3.select("#chart")
+								.append("div")
+								.attr("class", "tooltip");
+				tooltip.append("div")
+						.attr("class", "label");
+				tooltip.append("div")
+						.attr("class", "label")
+							
+				//path on click
+				path.on("click", function(d){clickPath(d);}).
+				on("mouseover", function(d){mouseOver(d);})
+				.on("mouseout", function(d){mouseOut(d);});
+				//transition
+				path.transition()
+					.duration(1000)
+					.attrTween("d", function(d){
+						var interpolate = d3.interpolate({startAngle: 0, endAngle: 0}, d);
+						return function(t){
+							return arc(interpolate(t));
+						};
+					});	
+					
+				legendColor2 = d3.scaleOrdinal(d3.schemeCategory10);
+				svg.selectAll("path").each(function(d){
+					if(!legendColor2.domain().includes(d.data.name)){
+						legendColor2(d.data.name);
+					}
+				});
+				legendColor2("Extreme Poverty %");
+				legendColor2("Country");
+			
+				svgleg.selectAll(".legend").remove();
+				var legend2 = svgleg.selectAll(".legend")
+						.data(legendColor2.domain())
+						.enter()
+						.append("g")
+						.attr("class", "legend")
+						.attr("transform", function(d,i){
+							var height = lr + ls;
+							var offset = height * legendColor2.domain().length / 2;
+							var horz = -2 * lr;
+							var vert = i * height - offset;
+							return "translate(" + horz + "," + vert + ")";
+						})
+						.on("click", function(d){
+							sort(d);
+							paint();
+						});
+					legend2.append("rect")
+						.attr("width", lr)
+						.attr("height", lr)
+						.style("fill", legendColor2)
+						.style("stroke", legendColor2);
+					
+					legend2.append("text")
+						.attr("x", lr + ls)
+						.attr("y", lr - ls)
+						.text(function(d){
+							return d;
+						})
+			}
+			
+			var mouseOver = function(d){
+				
+				if(!d.data.solo){
+					d3.selectAll("path").
+					style("opacity", function(p){
+						if(p.data.Country == d.data.Country){
+							return 0.1;
+						}
+					});
+					div.style("left", d3.event.pageX+10+"px");
+					div.style("top", d3.event.pageY-25+"px");
+					div.style("display", "inline-block");
+					div.html((d.data.Country)+"<br>People: "+(d.data.Total));
+					
+					d3.selectAll("tr")
+						.style("background-color", function(p,i){	
+							if(i == 0) return;
+							if(p.Country == d.data.Country) 
+							{return "#808080";}
+						});
+					gapData(d);
+
+					
+				}else{
+					d3.selectAll("path")
+					.style("opacity", function(p){
+						if(p == d){
+							return 0.1;
+						}
+					})
+					d3.selectAll("tr")
+						.style("background-color", function(p,i){
+							if(i == 0)return;
+							if(p[d.data.Country] == d.data.name){
+								return "#808080";
+							}
+						});
+				
+					div.style("left", d3.event.pageX+10+"px");
+					div.style("top", d3.event.pageY-25+"px");
+					div.style("display", "inline-block");
+					div.html((d.data.name)+"<br>People: "+ (d.data.value / d.data.Total).toFixed(2) * 100 + "%");
+				}
+			}
+			
+			var mouseOut = function(d){
+				d3.select("#gap").remove();
+				d3.selectAll("path").
+				style("opacity", 1);
+				div.style("display", "none");
+				d3.selectAll("tr").style("background-color", "white");
+				svg.selectAll("node").remove();
+			}
+			
+			var paintTable = function(tableData, columns){
+				//table
+				d3.selectAll("table").remove();
+				
+				var table = d3.select("#table")
+						.append("table");
+						
+				var thead = table.append("thead");
+				var tbody = table.append("tbody");
+				
+				//header row
+				thead.append("tr")
+					.selectAll("th")
+					.data(columns)
+					.enter()
+					.append("th")
+					.text(function(column){return column;});
+				
+				//rows for data
+				var rows = tbody.selectAll("tr")
+					.data(tableData)
+					.enter()
+					.append("tr")
+					.attr("class", "t")
+					.on("mouseover", function(d){
+						d3.select(this).style("background-color", "#808080");
+						d3.selectAll("path")
+							.style("opacity", function(p){
+								if(p.data.solo){
+									if(p.data.name == d[p.data.Country]) return 0.1;
+								}else{
+									if(p.data.Country == d.Country){
+									d3.selectAll("#gap").remove();
+										gapData(p);
+										return 0.1;
+									}
+								}
+							});
+
+
+					})
+					.on("mouseout", function(d){
+						d3.selectAll("#gap").remove();
+						d3.select(this).style("background-color", "white");
+						d3.selectAll("path")
+							.style("opacity", 1)
+					})
+					.on("click", function(d){
+						d3.select("#gap").remove();
+						d3.selectAll("path")
+							.each(function(p){
+								if(d.Country == p.data.Country && !p.data.solo){
+									clickPath(p);
+									d3.select("#gap").remove();
+									d3.selectAll("path")
+										.style("opacity", 1)
+									return;
+								}
+							})
+
+									
+					});
+							//create a cell in each row for each column
+				var cells = rows.selectAll("td")
+					.data(function(row){
+						return columns.map(function(column){
+							return {column: column, value: row[column]};
+						});
+					})
+					.enter()
+					.append("td")
+					.attr("class", "t")
+					.text(function(d){return d.value;})
+			}
+			
+			var clickPath = function(p){
+					d3.select("#gap").remove();
+					
+					if(!p.data.solo){
+						tableData = [];
+						columns = [p.data.Country, " "];
+						for(var i in dataset){
+							if(p.data.Country == dataset[i].Country){
+								var obj = {};
+								obj[p.data.Country] = dataset[i].name;
+								obj[" "] = dataset[i].value;
+								tableData.push(obj);
+							}
+						}
+					}else{
+						columns = pc;
+						tableData = ptd;
+					}
+					//console.log(pc);
+					paintTable(tableData, columns);
+					
+					pie.value(function(d){
+						var val;
+						//toggle solo
+						if(d.Country == p.data.Country) d.solo = d.solo ? false : true;
+						if(d.solo){val = d.value; d.state = 0}
+						else if(d.state == 1){val = 0; d.state = 0}
+						else{val = d.value; d.state = 1;}
+						
+						return val;
+						
+					});
+					
+					legendColor = d3.scaleOrdinal(d3.schemeCategory10);
+					
+					path = path.data(pie(dataset))
+								.attr("fill", function(d){
+									return (d.data.solo) ? legendColor(d.data.name) : d.data.color;
+								});
+								
+					path.transition()
+					.duration(1000)
+					.attrTween("d", function(d){
+						var interpolate = d3.interpolate(this._current, d);
+						return function(t){
+							return arc(interpolate(t));
+						}
+					});
+					
+					svg.selectAll(".legend").remove();
+					var legend = svg.selectAll(".legend")
+						.data(legendColor.domain())
+						.enter()
+						.append("g")
+						.attr("class", "legend")
+						.attr("transform", function(d,i){
+							var height = lr + ls;
+							var offset = height * legendColor.domain().length / 2;
+							var horz = -2 * lr;
+							var vert = i * height - offset;
+							return "translate(" + horz + "," + vert + ")";
+						});
+					legend.append("rect")
+						.attr("width", lr)
+						.attr("height", lr)
+						.style("fill", legendColor)
+						.style("stroke", legendColor);
+					
+					legend.append("text")
+						.attr("x", lr + ls)
+						.attr("y", lr - ls)
+						.text(function(d){
+							return d;
+						})
+				}
+			
+			var gapData = function(d){
+				//console.log(wave);
+				var list = variables["p"+wave];
+				var value = 0;
+				for(var i = 0; i < list.length; i ++){
+					if(list[i].Country == d.data.Country) value = list[i]["Extreme Poverty %"];
+				}
+				//console.log(value);
+				var node = svg.append("g").attr("id", "gap");
+				node.append("circle")
+					.attr("r", value * 1.5)
+					.attr("fill", function(){return d.data.color;});
+				node.append("text")
+					.attr("text-anchor", "middle")
+					.text(d.data.Country);			
+			}
+			
+			var sort = function(variable){
+				if(variable == "Country"){
+					current.sort(function(a,b){
+						return a.Country.localeCompare(b.Country);
+					});
+				}else if(variable == "Extreme Poverty %"){
+					current.sort(function(a,b){
+						return b["Extreme Poverty %"] - a["Extreme Poverty %"];
+					});
+				}else{
+					current.sort(function(a, b){
+						return (b[variable] / b.Sum) - (a[variable] / a.Sum);
+					});
+				}
+			}
+			
+			var updateCurrent = function(){
+				for (var i = 0; i < current.length; i ++){
+					for(var o = 0; o < currentp.length; o ++){
+						if(current[i].Country == currentp[o].Country){
+							current[i]["Extreme Poverty %"] = currentp[o]["Extreme Poverty %"];
+						}
+					}
+				}
+			}
+
+		</script>
+	</body>
+	
+</html>
